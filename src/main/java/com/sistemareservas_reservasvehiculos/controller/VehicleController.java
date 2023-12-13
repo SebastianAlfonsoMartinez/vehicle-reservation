@@ -1,7 +1,9 @@
 package com.sistemareservas_reservasvehiculos.controller;
 
-import com.sistemareservas_reservasvehiculos.domain.entity.Vehicle;
+import com.sistemareservas_reservasvehiculos.domain.dto.VehicleDto;
 import com.sistemareservas_reservasvehiculos.service.VehicleService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,31 +15,34 @@ public record VehicleController(
 ) {
 
     @PostMapping("/create")
-    public ResponseEntity<?> createVehicle(@RequestBody Vehicle vehicle) {
-        vehicleService.createVehicle(vehicle);
+    @SecurityRequirement(name = "BearerAuth")
+    public ResponseEntity<?> createVehicle(@RequestBody VehicleDto vehicleDto) {
+        vehicleService.createVehicle(vehicleDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
-
     }
 
     @GetMapping("/all")
+    @Operation(security = {@SecurityRequirement(name = "BearerAuth")})
     public ResponseEntity<?> searchAll() {
         return new ResponseEntity<>(vehicleService.vehicleList(), HttpStatus.OK);
     }
 
     @GetMapping("/search/{id}")
+    @SecurityRequirement(name = "BearerAuth")
     public ResponseEntity<?> searchVehicle(@PathVariable("id") Integer id) {
                 return new  ResponseEntity<>(vehicleService.findVehicleById(id), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
+    @SecurityRequirement(name = "BearerAuth")
     public ResponseEntity<?> deleteVehicle(@PathVariable("id") Integer id) {
         vehicleService.deleteVehicle(id);
         return new  ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateVehicle(@RequestBody Vehicle vehicle){
-        vehicleService.updateVehicle(vehicle);
+    public ResponseEntity<?> updateVehicle(@RequestBody VehicleDto vehicleDto){
+        vehicleService.updateVehicle(vehicleDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

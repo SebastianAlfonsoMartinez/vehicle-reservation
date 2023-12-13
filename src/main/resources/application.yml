@@ -5,8 +5,8 @@ spring:
     name: vehicle-reservation
   datasource:
     url: jdbc:postgresql://localhost:5432/vehicle_reservation_system
-    username: user_reservations_vehicle
-    password: admin1234
+    username: postgres
+    password: sa
     driver-class-name: org.postgresql.Driver
   jpa:
     defer-datasource-initialization: true
@@ -18,3 +18,12 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
+application:
+  security:
+    jwt:
+      secret-key: d5608c2a97c84dd0c0e0374ab865a131e0305df3f642ff83a03d796d748ac251
+      expiration: 86400000 # a day
+
+
+#      username: user_reservations_vehicle
+#      password: admin1234

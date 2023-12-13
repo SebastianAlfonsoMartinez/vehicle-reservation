@@ -2,10 +2,7 @@ package com.sistemareservas_reservasvehiculos.domain.entity;
 
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Objects;
@@ -14,8 +11,10 @@ import java.util.Objects;
 @Table(name = "vehicle")
 @Getter
 @Setter
+@Builder
 @ToString
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class Vehicle {
 
     @Id
@@ -24,7 +23,7 @@ public class Vehicle {
     private Integer id;
     private String brand; //marca
     private String typeVehicle;
-    private String ManufactureYear; //anio fabricacion
+    private String manufactureYear; //anio fabricacion
     private String color;
     private String typeTransmission;
     private String numberDoors;
