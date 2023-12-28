@@ -2,63 +2,57 @@ package com.sistemareservas_reservasvehiculos.service;
 
 import com.sistemareservas_reservasvehiculos.domain.dto.VehicleDto;
 import com.sistemareservas_reservasvehiculos.domain.entity.Vehicle;
+import com.sistemareservas_reservasvehiculos.exception.BookingException;
+import com.sistemareservas_reservasvehiculos.lasting.EMessage;
+import com.sistemareservas_reservasvehiculos.mapper.VehicleMapper;
 import com.sistemareservas_reservasvehiculos.repository.VehicleRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public record VehicleService(
-        VehicleRepository vehicleRepository) {
+        VehicleRepository vehicleRepository,
+        VehicleMapper mapper) {
 
     public void createVehicle(VehicleDto vehicleDto) {
-        Vehicle vehicle = Vehicle.builder()
-                .brand(vehicleDto.brand())
-                .typeVehicle(vehicleDto.typeVehicle())
-                .manufactureYear(vehicleDto.manufactureYear())
-                .color(vehicleDto.color())
-                .typeTransmission(vehicleDto.typeTransmission())
-                .numberDoors(vehicleDto.numberDoors())
-                .typeFuel(vehicleDto.typeFuel())
-                .price(vehicleDto.price())
-                .available(vehicleDto.available())
-                .build();
+        Vehicle vehicle = mapper.toEntity(vehicleDto);
         vehicleRepository.save(vehicle);
+
     }
 
-    public List<Vehicle> vehicleList() {
-        return vehicleRepository.findAll();
+    public List<VehicleDto> vehicleList(Integer offset, Integer limit) throws BookingException {
+        Pageable pageable = PageRequest.of(offset, limit);
+        Page<Vehicle> vehicles = vehicleRepository.findAll(pageable);
+        if (vehicles.getContent().isEmpty()){
+            throw new BookingException(EMessage.DATA_NOT_FOUND);
+        }
+        return mapper.toDtoList(vehicles.getContent());
     }
 
-    public Vehicle findVehicleById(Integer id) {
-        return vehicleRepository.findById(id).orElseThrow(() -> new RuntimeException("Vehicle not found..."));
+    public VehicleDto findVehicleById(Integer id)throws BookingException {
+        Vehicle vehicle = vehicleRepository.findById(id).orElseThrow(() ->
+                new BookingException(EMessage.DATA_NOT_FOUND));
+        return mapper.toDto(vehicle);
+
     }
 
-    public void deleteVehicle(Integer id) {
-        Vehicle vehicle = vehicleRepository.findById(id).orElseThrow(() -> new RuntimeException("Vehicle not found..."));
+    public void deleteVehicle(Integer id) throws BookingException {
+        Vehicle vehicle = vehicleRepository.findById(id).orElseThrow(() ->
+                new BookingException(EMessage.DATA_NOT_FOUND));
         vehicleRepository.delete(vehicle);
     }
 
-    public void updateVehicle(VehicleDto vehicleDto) {
-        Vehicle vehicle = vehicleRepository.findById(vehicleDto.id())
-                .orElseThrow(() -> new RuntimeException("Vehicle not found..."));
-        updateVehicleData(vehicle, vehicleDto);
+    public void updateVehicle(Integer id, VehicleDto vehicleDto) throws BookingException {
+        vehicleRepository.findById(id).orElseThrow(() -> new BookingException(EMessage.DATA_NOT_FOUND));
+        Vehicle vehicle = mapper.toEntity(vehicleDto);
         vehicleRepository.save(vehicle);
     }
 
-
-    private void updateVehicleData(Vehicle vehicle, VehicleDto vehicleDto) {
-
-        vehicle.setBrand(vehicleDto.brand());
-        vehicle.setTypeVehicle(vehicleDto.typeVehicle());
-        vehicle.setManufactureYear(vehicleDto.manufactureYear());
-        vehicle.setColor(vehicleDto.color());
-        vehicle.setTypeTransmission(vehicleDto.typeTransmission());
-        vehicle.setNumberDoors(vehicleDto.numberDoors());
-        vehicle.setTypeFuel(vehicleDto.typeFuel());
-        vehicle.setPrice(vehicleDto.price());
-        vehicle.setAvailable(vehicleDto.available());
-    }
 
 
 }

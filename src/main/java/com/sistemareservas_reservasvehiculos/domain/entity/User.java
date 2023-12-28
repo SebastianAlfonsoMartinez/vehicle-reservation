@@ -42,6 +42,10 @@ public class User implements UserDetails {
   @Enumerated(EnumType.STRING)
   private ERole role;
 
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  @ToString.Exclude
+  private  List<Booking> bookings;
+
   @Override
   public final boolean equals(Object o) {
     if (this == o) return true;

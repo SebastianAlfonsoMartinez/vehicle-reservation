@@ -6,12 +6,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public record VehicleDto (
         Integer id,
         String brand,
+        String reference,
         String typeVehicle,
         String manufactureYear,
         String color,
         String typeTransmission,
         String numberDoors,
         String typeFuel,
+        String imageUrl,
         Double price,
         Boolean available
 ){

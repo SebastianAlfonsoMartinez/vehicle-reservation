@@ -10,9 +10,11 @@ public enum EMessage {
 
   DATA_NOT_FOUND(HttpStatus.NOT_FOUND, "The data was not found"),
   USER_NOT_FOUND(HttpStatus.NOT_FOUND, "The user was not found"),
-  UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "The user was not Authorized to access at the application");
+  USER_EXISTS(HttpStatus.ALREADY_REPORTED, "The email was registered into the application previously"),
+  INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "The email or password send are invalid");
 
-  private final HttpStatus statusCode;
+
+  private final HttpStatus status;
   private final String message;
 
 
