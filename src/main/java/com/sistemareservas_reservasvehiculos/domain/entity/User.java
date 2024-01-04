@@ -1,6 +1,6 @@
 package com.sistemareservas_reservasvehiculos.domain.entity;
 
-import com.sistemareservas_reservasvehiculos.lasting.ERole;
+import com.sistemareservas_reservasvehiculos.aplication.lasting.ERole;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;

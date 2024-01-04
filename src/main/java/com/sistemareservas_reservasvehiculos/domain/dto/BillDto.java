@@ -1,16 +1,14 @@
 package com.sistemareservas_reservasvehiculos.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.sistemareservas_reservasvehiculos.aplication.lasting.EState;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public record BookingDto(
+public record BillDto(
         Integer id,
-        LocalDateTime startDate,
-        LocalDateTime endDate,
-        EState state,
+        ZonedDateTime issuedDate,
+        Double totalPrice,
         VehicleDto vehicle,
         UserDto user
 ) {

@@ -1,12 +1,10 @@
 package com.sistemareservas_reservasvehiculos.domain.entity;
 
 
-import com.sistemareservas_reservasvehiculos.aplication.lasting.EState;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -16,33 +14,25 @@ import java.util.Objects;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "booking")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class Booking {
+@Table(name = ("bill_detail"))
+public class BillDetail {
 
-    @Id
-    @SequenceGenerator(
-            name = "booking_id_sequence",
-            sequenceName = "booking_id_sequence"
+    @Id@SequenceGenerator(
+            name = "bill_detail_id_sequence",
+            sequenceName = "bill_detail_id_sequence"
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "booking_id_sequence"
+            generator = "bill_detail_id_sequence"
     )
     private Integer id;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-
-    @Enumerated(EnumType.STRING)
-    private EState state;
+    private String description;
+    private Double amount;
 
     @ManyToOne
-    @JoinColumn(name = "id_vehicle")
-    private  Vehicle vehicle;
+    @JoinColumn(name = "id_bill")
+    private Bill bill;
 
-    @ManyToOne
-    @JoinColumn(name = "id_user")
-    private  User user;
 
     @Override
     public final boolean equals(Object o) {
@@ -51,14 +41,13 @@ public class Booking {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        Booking booking = (Booking) o;
-        return getId() != null && Objects.equals(getId(), booking.getId());
+        BillDetail that = (BillDetail) o;
+        return getId() != null && Objects.equals(getId(), that.getId());
     }
 
     @Override
     public final int hashCode() {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
-
 
 }

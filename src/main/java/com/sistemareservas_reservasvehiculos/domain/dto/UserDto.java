@@ -2,9 +2,7 @@ package com.sistemareservas_reservasvehiculos.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.sistemareservas_reservasvehiculos.lasting.ERole;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import com.sistemareservas_reservasvehiculos.aplication.lasting.ERole;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record UserDto(
