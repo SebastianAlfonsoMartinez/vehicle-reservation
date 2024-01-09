@@ -25,7 +25,9 @@ public record VehicleController(
 
     @GetMapping("/all/{offset}/{limit}")
     @SecurityRequirement(name = "bearerAuth")
-    public ResponseEntity<?> searchAll(@PathVariable("offset") Integer offset, @PathVariable("limit") Integer limit) throws BookingException {
+    public ResponseEntity<?> searchAll(
+            @PathVariable("offset") Integer offset,
+            @PathVariable("limit") Integer limit) throws BookingException {
         List<VehicleDto> vehicles = vehicleService.vehicleList(offset, limit);
         return new ResponseEntity<>(vehicles, HttpStatus.OK);
     }
@@ -45,7 +47,9 @@ public record VehicleController(
 
     @PutMapping("/update/{id}")
     @SecurityRequirement(name = "bearerAuth")
-    public ResponseEntity<?> updateVehicle(@PathVariable("id") Integer id, @RequestBody VehicleDto vehicleDto) throws BookingException {
+    public ResponseEntity<?> updateVehicle(
+            @PathVariable("id") Integer id,
+            @RequestBody VehicleDto vehicleDto) throws BookingException {
         vehicleService.updateVehicle(id, vehicleDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }

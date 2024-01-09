@@ -1,7 +1,7 @@
 package com.sistemareservas_reservasvehiculos.domain.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sistemareservas_reservasvehiculos.aplication.lasting.ERole;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -9,7 +9,7 @@ public record UserDto(
         Integer id,
         String firstName,
         String lastName,
-        @JsonIgnore
+        @JsonProperty
         String password,
         String email,
         String phone,

@@ -56,8 +56,4 @@ public record BillController(
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-
-
-
-
 }

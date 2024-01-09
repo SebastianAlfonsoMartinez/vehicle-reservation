@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1/user")
 public record UserController(
         UserService userService
 ) {
@@ -30,7 +30,7 @@ public record UserController(
             @PathVariable("offset") Integer offset,
             @PathVariable("limit") Integer limit) throws BookingException {
         List<UserDto> users = userService.userList(offset, limit);
-        return new ResponseEntity<>(users, HttpStatus.FOUND);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/search/{id}")
@@ -46,7 +46,7 @@ public record UserController(
         return new  ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/update/{id}")
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<?> updateUser(@PathVariable("id") Integer id, @RequestBody UserDto userDto) throws BookingException {
         userService.updateUser(id, userDto);
