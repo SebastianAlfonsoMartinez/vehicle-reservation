@@ -6,6 +6,7 @@ import com.sistemareservas_reservasvehiculos.aplication.service.VehicleService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 public record VehicleController(
         VehicleService vehicleService
 ) {
+
 
     @PostMapping("/create")
     @SecurityRequirement(name = "bearerAuth")

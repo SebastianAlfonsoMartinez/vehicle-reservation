@@ -1,7 +1,9 @@
 package com.sistemareservas_reservasvehiculos.aplication.service;
 
 
+import com.sistemareservas_reservasvehiculos.domain.entity.User;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -35,29 +37,46 @@ public record JwtService(
     return claimsResolver.apply(claims);
   }
 
-  public String generateToken(UserDetails userDetails) {
-    return generateToken(new HashMap<>(), userDetails);
+  public String generateToken(UserDetails userDetails) {return generateToken(new HashMap<>(), userDetails);
   }
 
   private String generateToken(HashMap<String, Object> extraClaims, UserDetails userDetails) {
+    if (userDetails instanceof User) {
+      extraClaims.put("roles", ((User) userDetails).getRoles()); // Suponiendo que User tiene un método getRole().
+      extraClaims.put("fullName", ((User) userDetails).getFirstName() + " " + ((User) userDetails).getLastName());
+      extraClaims.put("id_user", ((User) userDetails).getId());
+
+    }
     return buildToken(extraClaims, userDetails, jwtExpiration);
   }
 
   private String buildToken(
-    HashMap<String, Object> extraClaims,
-    UserDetails userDetails,
-    Long expiration) {
-    return Jwts.builder()
-      .setClaims(extraClaims)
-      .setSubject(userDetails.getUsername())
-      .setIssuedAt(Date.from(
-        LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()
-      ))
-      .setExpiration(Date.from(
-        LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().plusMillis(expiration)
-      ))
-      .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-      .compact();
+          HashMap<String, Object> extraClaims,
+          UserDetails userDetails,
+          Long expiration) {
+    JwtBuilder builder = Jwts.builder()
+            .setSubject(userDetails.getUsername())
+            .setIssuedAt(Date.from(
+                    LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()
+            ))
+            .setExpiration(Date.from(
+                    LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().plusMillis(expiration)
+            ))
+            .signWith(getSignInKey(), SignatureAlgorithm.HS256);
+
+    // Agregar todos los extraClaims excepto los roles
+    extraClaims.forEach((key, value) -> {
+      if (!key.equals("role")) {
+        builder.claim(key, value);
+      }
+    });
+
+    // Finalmente, agrega los roles
+    if (extraClaims.containsKey("role")) {
+      builder.claim("role", extraClaims.get("role"));
+    }
+
+    return builder.compact();
 
   }
 

@@ -9,11 +9,10 @@ import java.util.List;
 import java.util.Set;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public record UserDto(
+public record UserOutDto(
         Integer id,
         String firstName,
         String lastName,
-        String password,
         String email,
         String phone,
         Boolean enable,

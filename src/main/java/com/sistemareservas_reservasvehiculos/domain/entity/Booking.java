@@ -1,6 +1,7 @@
 package com.sistemareservas_reservasvehiculos.domain.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sistemareservas_reservasvehiculos.aplication.lasting.EState;
 import jakarta.persistence.*;
 import lombok.*;
@@ -40,6 +41,7 @@ public class Booking {
     @JoinColumn(name = "id_vehicle")
     private  Vehicle vehicle;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "id_user")
     private  User user;

@@ -11,6 +11,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Service
 public record AuthenticationService(
         UserRepository userRepository,
@@ -21,6 +24,8 @@ public record AuthenticationService(
 ) {
 
     public String register(UserDto userDto){
+        Set<ERole> defaultRoles = new HashSet<>();
+        defaultRoles.add(ERole.USER);
         User user = User.builder()
                 .firstName(userDto.firstName())
                 .lastName(userDto.lastName())
@@ -28,7 +33,7 @@ public record AuthenticationService(
                 .enable(true)
                 .password(passwordEncoder.encode(userDto.password()))
                 .phone(userDto.phone())
-                .role(ERole.USER)
+                .roles(defaultRoles)
                 .enable(true)
                 .build();
         userRepository.save(user);

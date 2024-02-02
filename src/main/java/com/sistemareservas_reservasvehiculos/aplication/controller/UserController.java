@@ -4,6 +4,7 @@ package com.sistemareservas_reservasvehiculos.aplication.controller;
 import com.sistemareservas_reservasvehiculos.domain.dto.UserDto;
 import com.sistemareservas_reservasvehiculos.aplication.exception.BookingException;
 import com.sistemareservas_reservasvehiculos.aplication.service.UserService;
+import com.sistemareservas_reservasvehiculos.domain.dto.UserOutDto;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public record UserController(
     public ResponseEntity<?> searchAll(
             @PathVariable("offset") Integer offset,
             @PathVariable("limit") Integer limit) throws BookingException {
-        List<UserDto> users = userService.userList(offset, limit);
+        List<UserOutDto> users = userService.userList(offset, limit);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 

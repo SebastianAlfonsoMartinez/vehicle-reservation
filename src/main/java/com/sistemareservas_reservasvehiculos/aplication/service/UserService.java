@@ -1,6 +1,7 @@
 package com.sistemareservas_reservasvehiculos.aplication.service;
 
 import com.sistemareservas_reservasvehiculos.domain.dto.UserDto;
+import com.sistemareservas_reservasvehiculos.domain.dto.UserOutDto;
 import com.sistemareservas_reservasvehiculos.domain.entity.User;
 import com.sistemareservas_reservasvehiculos.aplication.exception.BookingException;
 import com.sistemareservas_reservasvehiculos.aplication.lasting.EMessage;
@@ -27,19 +28,19 @@ public record UserService(
         userRepository.save(user);
     }
 
-    public List<UserDto> userList(Integer offset, Integer limit) throws BookingException {
+    public List<UserOutDto> userList(Integer offset, Integer limit) throws BookingException {
         Pageable pageable = PageRequest.of(offset, limit);
         Page<User> breweries = userRepository.findAll(pageable);
         if (breweries.getContent().isEmpty()) {
             throw new BookingException(EMessage.DATA_NOT_FOUND);
         }
-        return mapper.toDtoList(breweries.getContent());
+        return mapper.toDtoListOut(breweries.getContent());
     }
 
-    public UserDto findUserById(Integer id) throws BookingException {
+    public UserOutDto findUserById(Integer id) throws BookingException {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new BookingException(EMessage.DATA_NOT_FOUND));
-        return mapper.toDto(user);
+        return mapper.toDtoOut(user);
     }
     public void deleteUser(Integer id) throws BookingException {
         User user = userRepository.findById(id)

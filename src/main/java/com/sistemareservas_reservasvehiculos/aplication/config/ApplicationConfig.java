@@ -46,7 +46,7 @@ public class ApplicationConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
-
+ //BEAN para autorizar token
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()

@@ -1,5 +1,6 @@
 package com.sistemareservas_reservasvehiculos.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sistemareservas_reservasvehiculos.aplication.lasting.ERole;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -39,9 +42,13 @@ public class User implements UserDetails {
   private String phone;
   private Boolean enable;
 
+  @ElementCollection(targetClass = ERole.class, fetch = FetchType.EAGER)
+  @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
   @Enumerated(EnumType.STRING)
-  private ERole role;
+  @Column(name = "role_name")
+  private Set<ERole> roles;
 
+  @JsonManagedReference
   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
   @ToString.Exclude
   private  List<Booking> bookings;
@@ -64,7 +71,9 @@ public class User implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(new SimpleGrantedAuthority(role.name()));
+    return this.roles.stream()
+            .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+            .collect(Collectors.toList());
   }
 
   @Override

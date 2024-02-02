@@ -32,7 +32,7 @@ public class Bill {
     private ZonedDateTime issuedDate;
     private Double totalPrice;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_user")
     private User user;
     @ManyToOne
