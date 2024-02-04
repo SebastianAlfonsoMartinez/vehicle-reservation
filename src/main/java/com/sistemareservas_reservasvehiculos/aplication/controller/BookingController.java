@@ -4,9 +4,11 @@ import com.sistemareservas_reservasvehiculos.domain.dto.BookingDto;
 import com.sistemareservas_reservasvehiculos.aplication.exception.BookingException;
 import com.sistemareservas_reservasvehiculos.aplication.service.BookingService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,9 +16,10 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("api/v1/booking")
-public record BookingController(
-        BookingService bookingService
-) {
+@RequiredArgsConstructor
+public class BookingController{
+
+    private final BookingService bookingService;
 
     @PostMapping("/create")
     @SecurityRequirement(name = "bearerAuth")
@@ -25,6 +28,7 @@ public record BookingController(
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/all/{offset}/{limit}")
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<?> findAllBooking(
@@ -33,6 +37,7 @@ public record BookingController(
         List<BookingDto> bookings = bookingService.findAllBooking(offset, limit);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
+
 
     @GetMapping("/search/{id}")
     @SecurityRequirement(name = "bearerAuth")

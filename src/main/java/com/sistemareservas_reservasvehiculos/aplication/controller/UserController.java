@@ -6,25 +6,29 @@ import com.sistemareservas_reservasvehiculos.aplication.exception.BookingExcepti
 import com.sistemareservas_reservasvehiculos.aplication.service.UserService;
 import com.sistemareservas_reservasvehiculos.domain.dto.UserOutDto;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/user")
-public record UserController(
-        UserService userService
-) {
+@RequiredArgsConstructor
+public class UserController{
 
+    private final UserService userService;
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/create")
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<?> createUser(@RequestBody UserDto userDto) {
         userService.createUser(userDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/all/{offset}/{limit}")
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<?> searchAll(
@@ -46,7 +50,7 @@ public record UserController(
         userService.deleteUser(id);
         return new  ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/update/{id}")
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<?> updateUser(@PathVariable("id") Integer id, @RequestBody UserDto userDto) throws BookingException {

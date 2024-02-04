@@ -4,6 +4,7 @@ import com.sistemareservas_reservasvehiculos.domain.dto.VehicleDto;
 import com.sistemareservas_reservasvehiculos.aplication.exception.BookingException;
 import com.sistemareservas_reservasvehiculos.aplication.service.VehicleService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,11 +14,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/vehicle")
-public record VehicleController(
-        VehicleService vehicleService
-) {
+@RequiredArgsConstructor
+public class VehicleController{
 
+    private final VehicleService vehicleService;
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/create")
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<?> createVehicle(@RequestBody VehicleDto vehicleDto) {
@@ -40,6 +42,7 @@ public record VehicleController(
                 return new  ResponseEntity<>(vehicleService.findVehicleById(id), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/delete/{id}")
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<?> deleteVehicle(@PathVariable("id") Integer id) throws BookingException {
@@ -47,6 +50,7 @@ public record VehicleController(
         return new  ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/update/{id}")
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<?> updateVehicle(
