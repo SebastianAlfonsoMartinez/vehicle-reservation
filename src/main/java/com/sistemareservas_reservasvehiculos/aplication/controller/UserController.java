@@ -1,6 +1,7 @@
 package com.sistemareservas_reservasvehiculos.aplication.controller;
 
 
+import com.sistemareservas_reservasvehiculos.aplication.lasting.ERole;
 import com.sistemareservas_reservasvehiculos.domain.dto.UserDto;
 import com.sistemareservas_reservasvehiculos.aplication.exception.BookingException;
 import com.sistemareservas_reservasvehiculos.aplication.service.UserService;
@@ -13,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -57,4 +59,12 @@ public class UserController{
         userService.updateUser(id, userDto);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PutMapping("/{userId}/roles")
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<?> updateUserRoles(@PathVariable Integer userId, @RequestBody Set<ERole> newRoles) throws BookingException {
+            userService.updateUserRoles(userId, newRoles);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
 }
+
