@@ -15,8 +15,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
+
 public record UserService(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
@@ -54,7 +56,18 @@ public record UserService(
         User user = mapper.toEntity(userDto);
         userRepository.save(user);
     }
+    public void updateUserRoles(Integer userId, Set<ERole> newRoles) throws BookingException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BookingException(EMessage.DATA_NOT_FOUND));
 
+        // Asegúrate de que el rol USER siempre esté presente
+        newRoles.add(ERole.USER); // Esto garantiza que el rol USER siempre se incluya
+
+        // Establece los nuevos roles
+        user.setRoles(newRoles);
+
+        userRepository.save(user);
+    }
 
 }
 
