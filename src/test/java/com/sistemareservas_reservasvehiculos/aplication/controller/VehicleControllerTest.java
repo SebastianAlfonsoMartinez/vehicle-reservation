@@ -42,6 +42,7 @@ public class VehicleControllerTest {
 
 
     @Test
+    @WithMockUser(roles = {"ADMIN"})
     void createVehicle_success() throws Exception {
         VehicleDto vehicleDto = new VehicleDto(
                 null,
@@ -81,6 +82,7 @@ public class VehicleControllerTest {
 
 
     @Test
+    @WithMockUser(roles = {"ADMIN"})
     void updateVehicle_success() throws Exception {
         VehicleDto vehicleDto = new VehicleDto(
                 null,
@@ -112,6 +114,7 @@ public class VehicleControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = {"ADMIN"})
     void updateVehicle_notFound() throws Exception {
         VehicleDto vehicleDto = new VehicleDto(
                 null,
@@ -137,6 +140,7 @@ public class VehicleControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = {"ADMIN"})
     void deleteVehicle_notFound() throws Exception {
         mockMvc.perform(delete("/api/v1/vehicle/delete/99"))
                 .andExpect(status().is(EMessage.DATA_NOT_FOUND.getStatus().value()))
