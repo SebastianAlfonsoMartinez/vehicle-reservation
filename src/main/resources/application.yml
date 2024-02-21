@@ -5,10 +5,10 @@ spring:
   application:
     name: vehicle-reservation
   datasource:
-    url: jdbc:postgresql://localhost:5432/vehicle_reservation_system
-    #jdbc:postgresql://vehicle-reservation-db.cjcu4csk4f7b.us-east-2.rds.amazonaws.com/vehicle_reservation
+    url: jdbc:postgresql://vehicle-reservation-db.cjcu4csk4f7b.us-east-2.rds.amazonaws.com/vehicle_reservation
+    #jdbc:postgresql://localhost:5432/vehicle_reservation_system
     username: postgres
-    password: sa #Admin*2024#
+    password: Admin*2024#
     driver-class-name: org.postgresql.Driver
   jpa:
     defer-datasource-initialization: true
@@ -26,6 +26,3 @@ application:
       secret-key: d5608c2a97c84dd0c0e0374ab865a131e0305df3f642ff83a03d796d748ac251
       expiration: 86400000 # a day
 
-
-#      username: user_reservations_vehicle
-#      password: admin1234
