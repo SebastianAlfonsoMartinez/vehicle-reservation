@@ -5,7 +5,9 @@ import com.sistemareservas_reservasvehiculos.domain.entity.Bill;
 import com.sistemareservas_reservasvehiculos.aplication.exception.BookingException;
 import com.sistemareservas_reservasvehiculos.aplication.lasting.EMessage;
 import com.sistemareservas_reservasvehiculos.aplication.mapper.BillMapper;
+import com.sistemareservas_reservasvehiculos.domain.entity.User;
 import com.sistemareservas_reservasvehiculos.domain.repository.BillRepository;
+import com.sistemareservas_reservasvehiculos.domain.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,10 +17,13 @@ import java.util.List;
 @Service
 public record BillService (
         BillRepository billRepository,
+        UserRepository userRepository,
         BillMapper mapper
 ){
-    public void  createBill(BillDto billDto){
+    public void  createBill(BillDto billDto, int userId) throws BookingException {
         Bill bill = mapper.toEntity(billDto);
+        User user = userRepository.findById(userId).orElseThrow(()-> new BookingException(EMessage.DATA_NOT_FOUND));
+        bill.setUser(user);
         billRepository.save(bill);
     }
 

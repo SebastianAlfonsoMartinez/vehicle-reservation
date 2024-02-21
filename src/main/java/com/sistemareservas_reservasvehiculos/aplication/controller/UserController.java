@@ -2,6 +2,7 @@ package com.sistemareservas_reservasvehiculos.aplication.controller;
 
 
 import com.sistemareservas_reservasvehiculos.aplication.lasting.ERole;
+import com.sistemareservas_reservasvehiculos.aplication.service.AuthenticationService;
 import com.sistemareservas_reservasvehiculos.domain.dto.UserDto;
 import com.sistemareservas_reservasvehiculos.aplication.exception.BookingException;
 import com.sistemareservas_reservasvehiculos.aplication.service.UserService;
@@ -22,6 +23,7 @@ import java.util.Set;
 public class UserController{
 
     private final UserService userService;
+    private final AuthenticationService authenticationService;
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/create")
@@ -40,11 +42,14 @@ public class UserController{
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/search/{id}")
+    @GetMapping("/info")
     @SecurityRequirement(name = "bearerAuth")
-    public ResponseEntity<?> searchUser(@PathVariable("id") Integer id) throws BookingException {
-        return new  ResponseEntity<>(userService.findUserById(id), HttpStatus.OK);
+    public ResponseEntity<?> searchUser() throws BookingException {
+        Integer userId = authenticationService.idUser();
+        System.out.println(userId);
+        return new  ResponseEntity<>(userService.findUserById(userId), HttpStatus.OK);
     }
+
 
     @DeleteMapping("/delete/{id}")
     @SecurityRequirement(name = "bearerAuth")

@@ -5,9 +5,10 @@ spring:
   application:
     name: vehicle-reservation
   datasource:
-    url: jdbc:postgresql://vehicle-reservation-db.cjcu4csk4f7b.us-east-2.rds.amazonaws.com/vehicle_reservation
+    url: jdbc:postgresql://localhost:5432/vehicle_reservation_system
+    #jdbc:postgresql://vehicle-reservation-db.cjcu4csk4f7b.us-east-2.rds.amazonaws.com/vehicle_reservation
     username: postgres
-    password: Admin*2024#
+    password: sa #Admin*2024#
     driver-class-name: org.postgresql.Driver
   jpa:
     defer-datasource-initialization: true

@@ -13,6 +13,7 @@ import com.sistemareservas_reservasvehiculos.domain.entity.Booking;
 import com.sistemareservas_reservasvehiculos.domain.entity.User;
 import com.sistemareservas_reservasvehiculos.domain.entity.Vehicle;
 import com.sistemareservas_reservasvehiculos.domain.repository.BookingRepository;
+import com.sistemareservas_reservasvehiculos.domain.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -29,6 +30,8 @@ class BookingServiceTest {
 
     @Mock
     private BookingRepository bookingRepository;
+    @Mock
+    private UserRepository userRepository;
 
     @Mock
     private BookingMapper mapper;
@@ -100,18 +103,22 @@ class BookingServiceTest {
 
 
     @Test
-    void registerBooking() {
-        BookingDto bookingDto = new BookingDto(null, sampleDateTime, sampleDateTime.plusDays(1)
-                , EState.ACTIVE, sampleVehicleDto, sampleUserDto);
-        Booking booking = new Booking(null, sampleDateTime, sampleDateTime.plusDays(1)
-                , EState.ACTIVE, sampleVehicle, sampleUser);
+    void registerBooking() throws BookingException {
+        BookingDto bookingDto = new BookingDto(null, sampleDateTime, sampleDateTime.plusDays(1),
+                EState.ACTIVE, sampleVehicleDto, sampleUserDto);
+        Booking booking = new Booking(null, sampleDateTime, sampleDateTime.plusDays(1),
+                EState.ACTIVE, sampleVehicle, null); // inicialmente, el usuario es null
 
         when(mapper.toEntity(bookingDto)).thenReturn(booking);
+        when(userRepository.findById(sampleUser.getId())).thenReturn(Optional.of(sampleUser));
 
-        bookingService.registerBooking(bookingDto);
+        bookingService.registerBooking(bookingDto, sampleUser.getId());
+
+        assertEquals(sampleUser, booking.getUser());
 
         verify(bookingRepository, times(1)).save(booking);
     }
+
 
     @Test
     void findAllBooking() throws BookingException {

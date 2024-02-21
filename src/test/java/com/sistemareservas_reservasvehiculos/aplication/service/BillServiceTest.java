@@ -11,6 +11,7 @@ import com.sistemareservas_reservasvehiculos.domain.entity.BillDetail;
 import com.sistemareservas_reservasvehiculos.domain.entity.User;
 import com.sistemareservas_reservasvehiculos.domain.entity.Vehicle;
 import com.sistemareservas_reservasvehiculos.domain.repository.BillRepository;
+import com.sistemareservas_reservasvehiculos.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,6 +35,8 @@ class BillServiceTest {
 
     @Mock
     private BillRepository billRepository;
+    @Mock
+    private UserRepository userRepository;
 
     @Mock
     private BillMapper billMapper;
@@ -80,14 +83,19 @@ class BillServiceTest {
     }
 
     @Test
-    void createBill_success() {
+    void createBill_success() throws BookingException {
+        // Preparación de la prueba
         Bill bill = new Bill(1, sampleDateTime, 100.0, sampleUser, sampleVehicle, sampleBillDetails);
         when(billMapper.toEntity(sampleBillDto)).thenReturn(bill);
+        when(userRepository.findById(sampleUser.getId())).thenReturn(Optional.of(sampleUser));
 
-        billService.createBill(sampleBillDto);
+        // Ejecutar el método bajo prueba
+        billService.createBill(sampleBillDto, sampleUser.getId());
 
+        // Verificar comportamientos esperados
         verify(billRepository, times(1)).save(bill);
     }
+
 
     @Test
     void findAllBill_withBills() throws BookingException {

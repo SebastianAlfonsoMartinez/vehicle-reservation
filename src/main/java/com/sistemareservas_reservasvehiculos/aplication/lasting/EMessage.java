@@ -14,6 +14,7 @@ public enum EMessage {
   INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "The email or password send are invalid");
 
 
+
   private final HttpStatus status;
   private final String message;
 
